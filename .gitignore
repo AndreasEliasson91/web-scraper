@@ -5,6 +5,11 @@ venv*
 __pycache__/
 *.pyc
 
+*bat
 
 links.txt
+TODO.txt
 *.csv
+
+# Not ready yet
+monster.py

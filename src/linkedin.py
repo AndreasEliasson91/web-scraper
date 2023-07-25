@@ -1,44 +1,41 @@
-import codecs
-import csv
-import time
 import requests
 
 from bs4 import BeautifulSoup
+from bs4.element import ResultSet
+from datetime import date
 
-BASE_URL = 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=python%20developer&location=gothenburg&geoId=&trk=public_jobs_jobs-search-bar_search-submit&position=1&pageNum=0&start='
-DATE = '2023-07-25'
-PAGE = 'LINKEDIN'
-KEYWORDS = ['python', 'developer']
+from settings import CSV_DIR
+from utils import write_to_csv
 
-def linkedin_scraper(url: str, page_num: int) -> None:
+BASE_URL = 'https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?'
+URL_SUFFIX = '&geoId=&trk=public_jobs_jobs-search-bar_search-submit&position=1&pageNum=0&start='
+KEYWORDS = ['junior', 'developer']
+LOCATION = 'gothenburg'
+
+URL = f'{BASE_URL}keywords={"%20".join(kw for kw in KEYWORDS)}&location={LOCATION}{URL_SUFFIX}'
+
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'
+}
+PARAMS = {
+    'name': 'div',
+    'class_': 'base-card relative w-full hover:no-underline focus:no-underline base-card--link base-search-card base-search-card--link job-search-card'
+}
+
+def scraper(url: str, page_num: int) -> ResultSet:
     next_page = url + str(page_num)
-    # time.sleep(2)
-    print(str(next_page))
-    response = requests.get(str(next_page), timeout=10)
-    
+    response = requests.get(str(next_page), timeout=10, headers=HEADERS)
     soup = BeautifulSoup(response.content, 'html.parser')
+    jobs = soup.find_all(**PARAMS)
+    return jobs
 
-    # print(soup.prettify())
-    jobs = soup.find_all('div', class_='base-card relative w-full hover:no-underline focus:no-underline base-card--link base-search-card base-search-card--link job-search-card')
-    csv_file = f'{PAGE}_{DATE}_{"-".join(kw for kw in KEYWORDS)}.csv    '
-
-    with codecs.open(csv_file, 'w+', encoding='utf-8') as file:
-        writer = csv.writer(file, lineterminator='\n')
-        writer.writerow(['Title', 'Company', 'Location', 'Apply'])
-
-        for job in jobs:
-            writer.writerow([
-                job.find('h3', class_='base-search-card__title').text.strip(),
-                job.find('h4', class_='base-search-card__subtitle').text.strip(),
-                job.find('span', class_='job-search-card__location').text.strip().encode('utf-8'),
-                job.find('a', class_='base-card__full-link').text.strip(),
-            ])
-
-        # print(f'Title: {title} : Company: {company} : Location: {location}\nURL: {link}')
-
-    if page_num < 25:
-        page_num += 25
-        linkedin_scraper(url, page_num)
-
-
-linkedin_scraper(BASE_URL, 0)
+def linkedin_run() -> None:
+    csv_file = f'../{CSV_DIR}/LINKEDIN_{date.today()}_{"-".join(kw for kw in KEYWORDS)}.csv'
+    for i in range(0, 200, 25):
+        jobs = scraper(URL, i)
+        if jobs:
+            write_to_csv(csv_file, jobs)
+        else:
+            break
+    print('Done')
+    print(URL)
