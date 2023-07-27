@@ -1,16 +1,16 @@
+# Virtual Environments
 .venv
 venv*
-.venv
 
+# Python Compiled Files etc.
 .idea/
 __pycache__/
 *.pyc
 
-*bat
-
+# Local Files
 links.txt
 TODO.txt
-*.csv
+*.bat
 
-# Not ready yet
-monster.py
+# Data Files
+*.csv
