@@ -1,0 +1,29 @@
+=== Job Portal Scrapper ===
+
+Base Idea:
+    Web Scrapper to crawl and scrap job portals and search for job adverts based on keywords
+
+Stages:
+    - Start with LinkedIn and scrap the front page for info (Just to see if the algo works)
+    - Add a keyword and a location, and scrap the first advert page
+    - Move to the next page, WHILE new_page: -> Scrap; else: -> Add info to csv
+    - Set up a .bat-script that runs daily
+
+Info to scrap and save:
+    - Job title
+    - location
+    - URL
+    - Requirments (add later)
+
+API:
+    - FE/BE
+    - Server
+    - MysSQL / MongoDB
+
+Pages to scrap:
+    - monster
+    - indeed
+    - linkedin
+    - arbetsförmedlingen
+
+# Save file gets name from scrap-date, keyword and URL, ex. PYTHON_MONSTER-SE_2023-07-12.csv etc.
