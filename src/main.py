@@ -1,4 +1,4 @@
-from linkedin import linkedin_run, KEYWORDS, LOCATION
+from linkedin import linkedin_run
 
 KEYWORDS = ['junior', 'developer']
 LOCATION = ['göteborg']
