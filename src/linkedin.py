@@ -39,7 +39,7 @@ def scraper(url: str, page_num: int) -> ResultSet:
     jobs = soup.find_all(**PARAMS['head'])
     return jobs
 
-def linkedin_run(keywords: list, location: str) -> None:
+def linkedin_run(keywords: list, location: str) -> pd.DataFrame:
     csv_file = csv_generator(Scraper.LINKEDIN, keywords, f'../{CSV_DIR}')
     url = url_generator(Scraper.LINKEDIN, keywords, location)
 
@@ -57,4 +57,6 @@ def linkedin_run(keywords: list, location: str) -> None:
             break
     
     df = pd.DataFrame(data, columns=['Title', 'Company', 'Location', 'Link'])
-    df.to_csv(csv_file)
+    # df.to_csv(csv_file)
+
+    return df

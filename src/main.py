@@ -4,7 +4,9 @@ KEYWORDS = ['junior', 'developer']
 LOCATION = ['göteborg']
 
 def main() -> None:
-    linkedin_run(KEYWORDS, LOCATION)
+    df = linkedin_run(KEYWORDS, LOCATION)
+    print(df.Title)
+    print(df.Link)
 
 
 if __name__ == '__main__':

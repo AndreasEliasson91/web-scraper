@@ -1,4 +1,5 @@
 beautifulsoup4==4.12.2
+fastapi==0.100.1
 pandas==2.0.3
 requests==2.31.0
 selenium==4.10.0

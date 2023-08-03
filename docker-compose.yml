@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  api:
+    container_name: 'API'
+    ports:
+      - 8080:8080
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    restart: always
