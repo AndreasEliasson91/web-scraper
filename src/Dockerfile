@@ -5,10 +5,11 @@ WORKDIR /src
 RUN python -m venv /opt/venv
 ENV PATH='/opt/venv/bin:${PATH}'
 
-COPY requirements.txt requirements.txt
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+COPY ./requirements.txt /src/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /src/requirements.txt
 
-RUN pip install uvicorn
+COPY . /src/
 
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+EXPOSE 8080
+
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
